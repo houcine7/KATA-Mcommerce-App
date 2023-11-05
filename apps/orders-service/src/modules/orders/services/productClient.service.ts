@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { fetcher } from '../utils/orders.utils';
-import { PRODUCT_SERVICE_URL } from 'src/config/app.config';
+import { PRODUCT_SERVICE_URL } from '../../../config/app.config';
 
 type ResponseSVC = {
   validQuantity: boolean;
