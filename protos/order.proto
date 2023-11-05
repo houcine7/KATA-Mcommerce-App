@@ -1,13 +1,12 @@
-syntax ="proto3";
+syntax = "proto3";
 
-package orders;
+package order;
 
 service OrdersService {
-    rpc SetOrderStatus (SetOrderStatusMsg) returns (Order) {}
-
+    rpc SetOrderStatus (SetOrderDto) returns (Order) {}
 }
 
-message SetOrderStatusMsg {
+message SetOrderDto {
     string orderId = 1;
     string status = 2;
 }
@@ -23,5 +22,5 @@ message Product {
     string productId = 1;
     double quantity = 2;
     double unitPrice = 3;
-    double discount =4;
+    optional double discount =4;
 }
