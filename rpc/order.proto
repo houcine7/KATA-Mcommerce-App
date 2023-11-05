@@ -1,0 +1,27 @@
+syntax ="proto3";
+
+package orders;
+
+service OrdersService {
+    rpc SetOrderStatus (SetOrderStatusMsg) returns (Order) {}
+
+}
+
+message SetOrderStatusMsg {
+    string orderId = 1;
+    string status = 2;
+}
+
+message Order {
+    string id = 1;
+    repeated Product products = 2;
+    double amount = 3;
+    string paymentStatus = 4;
+}
+
+message Product {
+    string productId = 1;
+    double quantity = 2;
+    double unitPrice = 3;
+    double discount =4;
+}

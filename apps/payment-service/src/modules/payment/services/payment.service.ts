@@ -1,7 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { Payment } from '../interfaces/payment.interface';
 import { CreatePaymentDTO } from '../dto/create-payment.dto';
+import { ClientGrpc } from '@nestjs/microservices';
+import { OrderService } from '../interfaces/orders-service.interface';
 
 type SVCResponse = {
   success: boolean;
@@ -10,11 +12,22 @@ type SVCResponse = {
 };
 
 @Injectable()
-export class PaymentService {
+export class PaymentService implements OnModuleInit {
+  private ordersSVC: any;
+
   constructor(
     @Inject('PAYMENT_MODEL')
     private paymentModel: Model<Payment>,
+    @Inject('ORDER_SERVICE')
+    private ordersServiceGrpcClient: ClientGrpc,
   ) {}
+
+  onModuleInit() {
+    this.ordersSVC =
+      this.ordersServiceGrpcClient.getService<OrderService>('OrdersService');
+
+    console.log('this.ordersSVC', this.ordersSVC);
+  }
 
   //
   async findPaymentByOrderId(orderId: string): Promise<SVCResponse> {
@@ -58,16 +71,40 @@ export class PaymentService {
         };
       }
 
-      // now we can save the order
+      // now we can save the payment
       const createdPayment = new this.paymentModel(createPaymentDTO);
-      const savedPayment = createdPayment.save();
+      const savedPayment = await createdPayment.save();
+      // set the order status
+      const orderStatusChanged = this.ordersSVC.SetOrderStatus({
+        id: createPaymentDTO.orderID,
+        status: 'SUCCESS',
+      });
+
+      console.log('orderStatusChanged', orderStatusChanged);
+
       return {
         success: true,
-        data: savedPayment,
+        data: {
+          payment: savedPayment,
+          orderStatus: orderStatusChanged,
+        },
         message: 'payment created successfully',
       };
     } catch (err) {
       throw new Error('error while creating payment ...');
     }
+  }
+
+  //testing the grpc client
+  async test() {
+    const orderStatusChanged = await this.ordersSVC?.SetOrderStatus({
+      id: '65444709ec89604270574f5a',
+      status: 'SUCCESS',
+    });
+    console.log('orderStatusChanged', orderStatusChanged);
+    return {
+      success: true,
+      data: 'testing this route',
+    };
   }
 }
