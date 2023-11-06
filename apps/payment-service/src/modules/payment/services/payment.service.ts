@@ -3,7 +3,7 @@ import { Model } from 'mongoose';
 import { Payment } from '../interfaces/payment.interface';
 import { CreatePaymentDTO } from '../dto/create-payment.dto';
 import { ClientGrpc } from '@nestjs/microservices';
-import { OrderService } from '../interfaces/orders-service.interface';
+import { ORDERS_SERVICE_NAME, OrdersServiceClient } from 'y/common';
 
 type SVCResponse = {
   success: boolean;
@@ -13,7 +13,7 @@ type SVCResponse = {
 
 @Injectable()
 export class PaymentService implements OnModuleInit {
-  private ordersSVC: any;
+  private ordersSVC: OrdersServiceClient;
 
   constructor(
     @Inject('PAYMENT_MODEL')
@@ -24,7 +24,9 @@ export class PaymentService implements OnModuleInit {
 
   onModuleInit() {
     this.ordersSVC =
-      this.ordersServiceGrpcClient.getService<OrderService>('OrdersService');
+      this.ordersServiceGrpcClient.getService<OrdersServiceClient>(
+        ORDERS_SERVICE_NAME,
+      );
 
     console.log('this.ordersSVC', this.ordersSVC);
   }
@@ -75,8 +77,8 @@ export class PaymentService implements OnModuleInit {
       const createdPayment = new this.paymentModel(createPaymentDTO);
       const savedPayment = await createdPayment.save();
       // set the order status
-      const orderStatusChanged = this.ordersSVC.SetOrderStatus({
-        id: createPaymentDTO.orderID,
+      const orderStatusChanged = this.ordersSVC.setOrderStatus({
+        orderId: createPaymentDTO.orderID,
         status: 'SUCCESS',
       });
 
@@ -96,12 +98,16 @@ export class PaymentService implements OnModuleInit {
   }
 
   //testing the grpc client
-  async test() {
-    const orderStatusChanged = await this.ordersSVC?.SetOrderStatus({
-      id: '65444709ec89604270574f5a',
-      status: 'SUCCESS',
-    });
-    console.log('orderStatusChanged', orderStatusChanged);
+  test() {
+    this.ordersSVC
+      .setOrderStatus({
+        orderId: '6544475bec89604270574f5f',
+        status: 'SUCCESS',
+      })
+      .subscribe((data) => {
+        console.log('data', data);
+      });
+
     return {
       success: true,
       data: 'testing this route',

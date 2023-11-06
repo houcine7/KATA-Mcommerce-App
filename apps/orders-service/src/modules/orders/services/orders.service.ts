@@ -1,17 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { Order } from '../interfaces/order.interface';
-import { CreateOrderDTO, SetOrderStatusMsg } from '../dto/create-order.dto';
+import { CreateOrderDTO } from '../dto/create-order.dto';
 import { ProductClientService } from './productClient.service';
+import { Order, SetOrderDto } from 'y/common';
 
 type CreateOrderResp = {
   order: Order;
   message?: string;
-  created: boolean;
+  created?: boolean;
+  success?: boolean;
 };
 
 @Injectable()
-export class OrdersService {
+export class OrdersServiceImp {
   constructor(
     @Inject('ORDER_MODEL')
     private orderModel: Model<Order>,
@@ -88,16 +89,32 @@ export class OrdersService {
     }
   }
 
-  async setOrderStatus(setOrderStatusDTO: SetOrderStatusMsg): Promise<any> {
+  async setOrderStatus(
+    setOrderStatusDTO: SetOrderDto,
+  ): Promise<CreateOrderResp> {
     try {
-      const updatedModel = this.orderModel.updateOne(
-        { id: setOrderStatusDTO.id },
+      const updatedModel = await this.orderModel.updateOne(
+        { id: setOrderStatusDTO.orderId },
         { status: setOrderStatusDTO.status },
       );
+
+      if (updatedModel.modifiedCount === 1) {
+        // Document was updated successfully
+        const updatedDocument = await this.orderModel.findOne({
+          id: setOrderStatusDTO.orderId,
+        });
+        console.log('Updated Document:', updatedDocument);
+        return {
+          order: updatedDocument,
+          created: true,
+        };
+      }
+
+      console.log(updatedModel);
       return {
-        success: true,
-        data: updatedModel,
-        message: 'order status updated successfully',
+        message: 'Error in updating order status',
+        order: null,
+        created: false,
       };
     } catch (error) {
       throw new Error("couldn't update order status");

@@ -1,3 +1,6 @@
+import { Observable } from 'rxjs';
+import { Order, SetOrderDto } from 'y/common';
+
 export interface OrderService {
-  SetOrderStatus(orderById: { id: string; status: string }): Promise<any>;
+  setOrderStatus(setOrderDto: SetOrderDto): Observable<Order>;
 }

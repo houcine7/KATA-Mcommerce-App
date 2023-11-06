@@ -20,8 +20,8 @@
     "test:e2e": "jest --config ./apps/payment-service/test/jest-e2e.json"
   },
   "dependencies": {
-    "@grpc/grpc-js": "^1.9.9",
-    "@grpc/proto-loader": "^0.7.10",
+    "@grpc/grpc-js": "^1.8.21",
+    "@grpc/proto-loader": "^0.7.8",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/microservices": "^10.2.8",
@@ -29,7 +29,9 @@
     "dotenv": "^16.3.1",
     "mongoose": "^8.0.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "ts-proto": "^1.156.2",
+    "ts-protoc-gen": "^0.15.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

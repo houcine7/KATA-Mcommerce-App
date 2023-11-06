@@ -2,5 +2,5 @@
 require('dotenv').config();
 
 export const dbConfig = {
-  dbURL: process.env.DB_URL,
+  dbURL: 'mongodb://localhost:27017/McommercePayment',
 };

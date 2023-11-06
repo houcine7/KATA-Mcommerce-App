@@ -7,14 +7,14 @@ import {
   Post,
   Res,
 } from '@nestjs/common';
-import { OrdersService } from '../services/orders.service';
+import { OrdersServiceImp } from '../services/orders.service';
 import { CreateOrderDTO } from '../dto/create-order.dto';
 import { Response } from 'express';
 
 @Controller('orders')
 export class OrdersController {
   //
-  constructor(private OrdersSVC: OrdersService) {}
+  constructor(private OrdersSVC: OrdersServiceImp) {}
 
   @Post()
   async create(

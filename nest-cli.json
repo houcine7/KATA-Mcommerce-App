@@ -1,13 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/payment-service/src",
+  "sourceRoot": "./",
+  "entryFile": "src/main",
   "compilerOptions": {
     "deleteOutDir": true,
     "watchAssets": true,
-    "assets": [
-      "../rpc/*.proto"
-    ],
+    "assets": ["protos/*.proto"],
     "webpack": true,
     "tsConfigPath": "apps/payment-service/tsconfig.app.json"
   },
@@ -17,19 +16,23 @@
     "payment-service": {
       "type": "application",
       "root": "apps/payment-service",
-      "entryFile": "main",
-      "sourceRoot": "apps/payment-service/src",
+      "entryFile": "src/main",
+      "sourceRoot": "./",
       "compilerOptions": {
-        "tsConfigPath": "apps/payment-service/tsconfig.app.json"
+        "tsConfigPath": "apps/payment-service/tsconfig.app.json",
+        "assets": ["protos/*.proto"],
+        "watchAssets": true
       }
     },
     "orders-service": {
       "type": "application",
       "root": "apps/orders-service",
-      "entryFile": "main",
-      "sourceRoot": "apps/orders-service/src",
+      "entryFile": "src/main",
+      "sourceRoot": "./",
       "compilerOptions": {
-        "tsConfigPath": "apps/orders-service/tsconfig.app.json"
+        "tsConfigPath": "apps/orders-service/tsconfig.app.json",
+        "assets": ["protos/*.proto"],
+        "watchAssets": true
       }
     },
     "products-service": {

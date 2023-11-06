@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { PaymentProviders } from './providers/payments.provider';
-import { DatabaseModule } from 'src/database/database.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { PaymentService } from './services/payment.service';
 import { PaymentController } from './controller/payment.controller';
-import { DatabaseProviders } from 'src/database/database.providers';
+import { ORDER_PACKAGE_NAME } from 'y/common';
+import { join } from 'path';
+import { DatabaseProviders } from '../../database/database.providers';
+import { DatabaseModule } from '../../database/database.module';
 
 @Module({
   controllers: [PaymentController],
@@ -16,9 +18,8 @@ import { DatabaseProviders } from 'src/database/database.providers';
         name: 'ORDER_SERVICE',
         transport: Transport.GRPC,
         options: {
-          package: 'orders',
-          protoPath: '../rpc/order.proto',
-          url: 'localhost:5000',
+          package: ORDER_PACKAGE_NAME,
+          protoPath: join(__dirname, '../order.proto'),
         },
       },
     ]),

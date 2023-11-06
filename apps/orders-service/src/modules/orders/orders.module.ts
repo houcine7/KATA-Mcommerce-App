@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { OrderProviders } from './providers/orders.providers';
 
-import { OrdersService } from './services/orders.service';
+import { OrdersServiceImp } from './services/orders.service';
 import { ProductClientService } from './services/productClient.service';
 import { OrdersController } from './controllers/orders.controller';
 import { OrdersGrpcController } from './controllers/orders-grpc.controller';
@@ -14,7 +14,7 @@ import { DatabaseModule } from '../../database/database.module';
     ...OrderProviders,
     ...DatabaseProviders,
     ProductClientService,
-    OrdersService,
+    OrdersServiceImp,
   ],
   imports: [DatabaseModule],
 })
