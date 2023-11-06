@@ -3,7 +3,7 @@ import { env } from 'process';
 require('dotenv').config();
 
 export const AppConfig = {
-  port: env.APP_PORT,
+  port: 3002,
   url: `0.0.0.0:5000`,
 };
 

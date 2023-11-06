@@ -10,9 +10,11 @@ export interface SetOrderDto {
 }
 
 export interface Order {
+  id: string;
   products: Product[];
   amount: number;
   paymentStatus: string;
+  createdAt: Date | string;
 }
 
 export interface Product {

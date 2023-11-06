@@ -12,9 +12,11 @@ message SetOrderDto {
 }
 
 message Order {
+    string id = 1;
     repeated Product products = 2;
     double amount = 3;
     string paymentStatus = 4;
+    string createdAt = 5;
 }
 
 message Product {

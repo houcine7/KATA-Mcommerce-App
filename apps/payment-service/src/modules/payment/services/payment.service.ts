@@ -4,6 +4,7 @@ import { Payment } from '../interfaces/payment.interface';
 import { CreatePaymentDTO } from '../dto/create-payment.dto';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ORDERS_SERVICE_NAME, OrdersServiceClient } from 'y/common';
+import { lastValueFrom } from 'rxjs';
 
 type SVCResponse = {
   success: boolean;
@@ -98,19 +99,16 @@ export class PaymentService implements OnModuleInit {
   }
 
   //testing the grpc client
-  test() {
-    this.ordersSVC
-      .setOrderStatus({
-        orderId: '6544475bec89604270574f5f',
-        status: 'SUCCESS',
-      })
-      .subscribe((data) => {
-        console.log('data', data);
-      });
+  async test() {
+    const res = this.ordersSVC.setOrderStatus({
+      orderId: '6544475bec89604270574f5f',
+      status: 'FAILED',
+    });
 
-    return {
-      success: true,
-      data: 'testing this route',
-    };
+    res.subscribe((data) => {
+      console.log('data', data);
+    });
+    const data = await lastValueFrom(res);
+    return data;
   }
 }

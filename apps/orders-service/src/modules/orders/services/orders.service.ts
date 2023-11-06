@@ -5,7 +5,7 @@ import { ProductClientService } from './productClient.service';
 import { Order, SetOrderDto } from 'y/common';
 
 type CreateOrderResp = {
-  order: Order;
+  data: any;
   message?: string;
   created?: boolean;
   success?: boolean;
@@ -38,7 +38,7 @@ export class OrdersServiceImp {
           return {
             message: message,
             created: false,
-            order: null,
+            data: null,
           };
         }
       }
@@ -46,7 +46,7 @@ export class OrdersServiceImp {
       if (calculatedAmount != createOrderDto.amount) {
         return {
           message: 'Amount is not correct',
-          order: null,
+          data: null,
           created: false,
         };
       }
@@ -54,7 +54,7 @@ export class OrdersServiceImp {
       const createdOrder = new this.orderModel(createOrderDto);
       const result = await createdOrder.save();
       return {
-        order: result,
+        data: result,
         created: true,
       };
     } catch (err) {
@@ -62,7 +62,7 @@ export class OrdersServiceImp {
       console.log(err);
       return {
         message: 'Error in creating order',
-        order: null,
+        data: null,
         created: false,
       };
     }
@@ -93,28 +93,21 @@ export class OrdersServiceImp {
     setOrderStatusDTO: SetOrderDto,
   ): Promise<CreateOrderResp> {
     try {
-      const updatedModel = await this.orderModel.updateOne(
-        { id: setOrderStatusDTO.orderId },
-        { status: setOrderStatusDTO.status },
+      const updatedModel = await this.orderModel.findOneAndUpdate(
+        { _id: setOrderStatusDTO.orderId },
+        {
+          $set: {
+            paymentStatus: setOrderStatusDTO.status,
+          },
+        },
+        { new: true },
       );
 
-      if (updatedModel.modifiedCount === 1) {
-        // Document was updated successfully
-        const updatedDocument = await this.orderModel.findOne({
-          id: setOrderStatusDTO.orderId,
-        });
-        console.log('Updated Document:', updatedDocument);
-        return {
-          order: updatedDocument,
-          created: true,
-        };
-      }
+      console.log('Updated Model:', updatedModel);
 
-      console.log(updatedModel);
       return {
-        message: 'Error in updating order status',
-        order: null,
-        created: false,
+        data: updatedModel,
+        success: true,
       };
     } catch (error) {
       throw new Error("couldn't update order status");

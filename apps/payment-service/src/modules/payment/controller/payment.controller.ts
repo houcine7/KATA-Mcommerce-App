@@ -12,10 +12,18 @@ export class PaymentController {
   }
   @Get('/test')
   async test() {
-    await this.paymentService.test();
-    return {
-      success: true,
-      data: 'testing this route',
-    };
+    try {
+      const res = await this.paymentService.test();
+
+      return {
+        res,
+        testStatus: 'success',
+      };
+    } catch (error) {
+      return {
+        error,
+        testStatus: 'failed',
+      };
+    }
   }
 }

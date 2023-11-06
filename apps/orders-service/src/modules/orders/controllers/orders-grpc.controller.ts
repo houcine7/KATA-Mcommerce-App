@@ -18,11 +18,17 @@ export class OrdersGrpcController implements OrdersServiceController {
 
   async setOrderStatus(request: SetOrderDto) {
     console.log('Method invoked from gRPC client');
-    console.log(request);
+    console.log('the request', request);
     try {
       const result = await this.OrdersSVC.setOrderStatus(request);
-      console.log(result.order);
-      return result.order;
+      console.log('THIS IS RESULT', result.data);
+      return {
+        id: result.data?._id,
+        products: result.data?.products,
+        amount: result.data?.amount,
+        paymentStatus: result.data?.paymentStatus,
+        createdAt: result.data?.createdAt,
+      };
     } catch (error) {
       console.log(error);
       return null;
