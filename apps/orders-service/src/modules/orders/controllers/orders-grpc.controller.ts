@@ -1,15 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { OrdersServiceImp } from '../services/orders.service';
 import {
-  // ORDER_SERVICE_NAME,
-  // Order,
   OrdersServiceController,
   OrdersServiceControllerMethods,
   SetOrderDto,
 } from 'y/common';
-import { of } from 'rxjs';
-
-// import { GrpcMethod } from '@nestjs/microservices';
 
 @Controller()
 @OrdersServiceControllerMethods()

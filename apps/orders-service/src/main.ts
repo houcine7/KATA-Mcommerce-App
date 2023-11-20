@@ -9,6 +9,9 @@ import { AppConfig } from './config/app.config';
 async function bootstrap() {
   const app0 = await NestFactory.create(AppModule, {
     logger: ['error', 'log'],
+    cors: {
+      origin: AppConfig.corsOrigin,
+    },
   });
 
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -25,8 +28,7 @@ async function bootstrap() {
   await app.listen();
 
   await app0.listen(AppConfig.port, () => {
-    console.log(join(__dirname, '../order.proto'));
-    //console.log(app.getMicroservices());
+    console.log('REST api is listening on port', AppConfig.port);
   });
 }
 bootstrap();

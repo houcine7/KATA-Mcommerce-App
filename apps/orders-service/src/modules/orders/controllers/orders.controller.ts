@@ -23,11 +23,12 @@ export class OrdersController {
   ): Promise<Response> {
     //
     try {
+      // console.log('createOrderDTO', createOrderDTO);
       const result = await this.OrdersSVC.createOrder(createOrderDTO);
       if (!result.created) {
         return res.status(HttpStatus.BAD_REQUEST).json(result.message);
       }
-      return res.status(HttpStatus.OK).json(result.order);
+      return res.status(HttpStatus.OK).json(result);
     } catch (err) {
       return res.status(HttpStatus.BAD_REQUEST).json('Error creating order');
     }
