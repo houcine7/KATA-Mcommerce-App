@@ -57,5 +57,5 @@ jobs:
       #Build and push images
       - name: Build and push images
         run: |
-          podman compose -f ./docker-compose.yaml build
-          podman compose -f ./docker-compose.yaml push
+          podman compose build
+          podman compose push
