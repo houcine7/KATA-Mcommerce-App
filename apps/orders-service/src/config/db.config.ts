@@ -2,5 +2,5 @@
 require('dotenv').config();
 
 export const DBConfig = {
-  dbUrl: 'mongodb://localhost:27017/McommerceOrders',
+  dbUrl: 'mongodb://127.0.0.1:27017/McommerceOrders',
 };

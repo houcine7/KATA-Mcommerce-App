@@ -62,4 +62,10 @@ export class OrdersController {
       return res.status(HttpStatus.BAD_REQUEST).json('Error getting orders');
     }
   }
+
+  @Get(':id/full-object')
+  async getFullOrderDetails(@Param('id') id_order, @Res() res: Response) {
+    const ans = await this.OrdersSVC.getOrdersFull(id_order);
+    return res.status(200).json(ans);
+  }
 }

@@ -3,13 +3,10 @@ import { Model } from 'mongoose';
 import { CreateOrderDTO } from '../dto/create-order.dto';
 import { ProductClientService } from './productClient.service';
 import { Order, SetOrderDto } from 'y/common';
+import { CreateOrderResp, FullOrder, Product } from '../utils/types';
+import { fetcher } from '../utils/orders.utils';
 
-type CreateOrderResp = {
-  data: any;
-  message?: string;
-  created?: boolean;
-  success?: boolean;
-};
+const PRODUCTS_SVC_BASE_URL = 'http://localhost:3007/products';
 
 @Injectable()
 export class OrdersServiceImp {
@@ -112,5 +109,54 @@ export class OrdersServiceImp {
     } catch (error) {
       throw new Error("couldn't update order status");
     }
+  }
+
+  async getOrdersFull(orderId: any): Promise<FullOrder> {
+    try {
+      const order = await this.orderModel.findById(orderId).exec();
+
+      const products: Product[] = [];
+
+      //
+      let index = 0;
+      for (const item of order.products) {
+        const curr_id = item.productId;
+        const { data } = (await fetcher(
+          `${PRODUCTS_SVC_BASE_URL}/${curr_id}`,
+        )) as {
+          data: {
+            _id: string;
+            title: string;
+            description: string;
+            price: number;
+            image: string;
+          };
+        };
+        console.log(data);
+        if (data) {
+          products[index++] = {
+            idProduct: data?._id,
+            title: data?.title,
+            description: data?.description,
+            price: data?.price,
+            image: data?.image,
+            quantity: item.quantity,
+          };
+        }
+      }
+      const result: FullOrder = {
+        amount: order.amount,
+        discount: 0,
+        paymentStatus: order.paymentStatus,
+        id: String(order._id),
+        products: products,
+      };
+
+      return result;
+    } catch (err) {
+      console.log(err);
+    }
+
+    return null;
   }
 }

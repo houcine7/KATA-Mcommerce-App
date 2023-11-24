@@ -10,15 +10,6 @@ export const PaymentSchema = new Schema({
     type: Number,
     required: true,
   },
-  currency: {
-    type: String,
-    default: 'USD',
-  },
-  method: {
-    type: String,
-    enum: ['paypal', 'stripe'],
-    default: 'stripe',
-  },
   status: {
     type: String,
     enum: ['pending', 'paid', 'failed'],
@@ -27,5 +18,27 @@ export const PaymentSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  userId: {
+    type: String,
+    required: true,
+  },
+  cardDetails: {
+    cardNumber: {
+      type: String,
+      required: true,
+    },
+    cardHolder: {
+      type: String,
+      required: true,
+    },
+    creditExpiry: {
+      type: String,
+      required: true,
+    },
+    cardCvc: {
+      type: String,
+      required: true,
+    },
   },
 });

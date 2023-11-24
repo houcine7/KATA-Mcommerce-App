@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { fetcher } from '../utils/orders.utils';
 import { PRODUCT_SERVICE_URL } from '../../../config/app.config';
+import { Product } from '../utils/types';
 
 type ResponseSVC = {
   validQuantity: boolean;
@@ -15,9 +16,12 @@ export class ProductClientService {
     quantity: number,
   ): Promise<ResponseSVC> {
     try {
-      const { data, status } = await fetcher(
+      const { data, status } = (await fetcher(
         `${PRODUCT_SERVICE_URL}/${productId}`,
-      );
+      )) as {
+        data: Product;
+        status: number;
+      };
       if (status != 200) {
         return {
           validQuantity: false,

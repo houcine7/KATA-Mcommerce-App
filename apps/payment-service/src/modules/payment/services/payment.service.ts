@@ -1,7 +1,7 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { Payment } from '../interfaces/payment.interface';
-import { CreatePaymentDTO } from '../dto/create-payment.dto';
+import { CreatePaymentDTO, mapToEntity } from '../dto/create-payment.dto';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ORDERS_SERVICE_NAME, OrdersServiceClient } from 'y/common';
 import { lastValueFrom } from 'rxjs';
@@ -28,8 +28,6 @@ export class PaymentService implements OnModuleInit {
       this.ordersServiceGrpcClient.getService<OrdersServiceClient>(
         ORDERS_SERVICE_NAME,
       );
-
-    console.log('this.ordersSVC', this.ordersSVC);
   }
 
   //
@@ -64,26 +62,28 @@ export class PaymentService implements OnModuleInit {
   ): Promise<SVCResponse> {
     try {
       const paymentExists = await this.findPaymentByOrderId(
-        createPaymentDTO.orderID,
+        createPaymentDTO.orderId,
       );
       if (paymentExists.success) {
         return {
           success: false,
           data: null,
-          message: `this payment with orderId=${createPaymentDTO.orderID} is already created !`,
+          message: `this payment with orderId=${createPaymentDTO.orderId} is already created !`,
         };
       }
 
       // now we can save the payment
-      const createdPayment = new this.paymentModel(createPaymentDTO);
-      const savedPayment = await createdPayment.save();
-      // set the order status
-      const orderStatusChanged = this.ordersSVC.setOrderStatus({
-        orderId: createPaymentDTO.orderID,
-        status: 'SUCCESS',
+      const createdPayment = new this.paymentModel({
+        ...mapToEntity(createPaymentDTO),
+        status: 'paid',
       });
 
-      console.log('orderStatusChanged', orderStatusChanged);
+      const savedPayment = await createdPayment.save();
+      // set the order status
+      const orderStatusChanged = await this.ordersSVC.setOrderStatus({
+        orderId: createPaymentDTO.orderId,
+        status: 'SUCCESS',
+      });
 
       return {
         success: true,
@@ -94,6 +94,7 @@ export class PaymentService implements OnModuleInit {
         message: 'payment created successfully',
       };
     } catch (err) {
+      console.log('err', err);
       throw new Error('error while creating payment ...');
     }
   }

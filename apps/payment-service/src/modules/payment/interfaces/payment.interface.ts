@@ -7,4 +7,11 @@ export interface Payment extends Document {
   readonly method: string;
   readonly status: string;
   readonly createdAt: Date;
+  readonly userId: string;
+  readonly cardDetails: {
+    cardNumber: string;
+    cardHolderName: string;
+    cardExpireDate: string;
+    cardCvv: string;
+  };
 }
