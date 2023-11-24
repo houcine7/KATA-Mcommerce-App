@@ -56,6 +56,11 @@ jobs:
           sudo apt-get update
           sudo apt-get -y install podman-compose
 
+        # Installing podman-compose
+      - name: Installing podman-compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y podman-compose
         # Login to dockerhub with podman
       - name: Login to dockerhub
         run: |
