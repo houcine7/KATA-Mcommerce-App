@@ -48,26 +48,33 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y podman
-      - name: Install Podman Compose on Ubuntu
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y software-properties-common
-          sudo add-apt-repository -y ppa:projectatomic/ppa
-          sudo apt-get update
-          sudo apt-get -y install podman-compose
 
-        # Installing podman-compose
-      - name: Installing podman-compose
+        # Installing docker-compose
+      - name: Install Docker Compose
         run: |
           sudo apt-get update
-          sudo apt-get install -y podman-compose
+          sudo apt-get install -y docker-compose
+
         # Login to dockerhub with podman
       - name: Login to dockerhub
         run: |
           podman login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      #Build and push images
+      # building and pushing images with docker-compose
       - name: Build and push images
         run: |
-          podman-compose build
-          podman-compose push
+          docker-compose build
+
+      # pushing images to dockerhub
+      - name: Push images to dockerhub
+        run: |
+          podman login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          echo "Pushing images to dockerhub"
+          images=($(podman images --format={{.Repository}}:{{.Tag}}))
+          echo "${images}"
+
+          for image in "${images[@]}"
+          echo "Pushing image: ${image} to dockerhub"
+          do
+            podman push "$image"
+          done
