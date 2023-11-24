@@ -23,11 +23,11 @@ jobs:
 
       # Install pnpm globally as a package manager
       - name: Install pnpm
-        run: npm i -g pnpm
+        run: npm i -g pnpm 
 
       # Install monorepo dependencies
       - name: Install all dependecies
-        run: pnpm i
+        run: pnpm i --no-frozen-lockfile
 
       # Build each service on the monorepo
       - name: Build all services
