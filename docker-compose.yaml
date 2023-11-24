@@ -1,0 +1,34 @@
+version: '3'
+services:
+  products-service:
+    container_name: products-service
+    build:
+      context: .
+      args:
+        - APP=products-service
+    restart: always
+    ports:
+      - 3007:3007
+  orders-service:
+    container_name: orders-service
+    build:
+      context: .
+      args:
+        - APP=orders-service
+    restart: always
+    ports:
+      - 3002:3002
+    # relays on products-service
+    depends_on:
+      - products-service
+  payments-service:
+    container_name: payment-service
+    build:
+      context: .
+      args:
+        - APP=payment-service
+    restart: always
+    ports:
+      - 3001:3001
+    depends_on:
+      - orders-service

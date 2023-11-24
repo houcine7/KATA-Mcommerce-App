@@ -38,10 +38,12 @@
     "products-service": {
       "type": "application",
       "root": "apps/products-service",
-      "entryFile": "main",
-      "sourceRoot": "apps/products-service/src",
+      "entryFile": "src/main",
+      "sourceRoot": "./",
       "compilerOptions": {
-        "tsConfigPath": "apps/products-service/tsconfig.app.json"
+        "tsConfigPath": "apps/products-service/tsconfig.app.json",
+        "assets": ["protos/*.proto"],
+        "watchAssets": true
       }
     },
     "common": {
