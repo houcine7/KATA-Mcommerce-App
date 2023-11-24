@@ -1,5 +1,14 @@
 version: '3'
 services:
+  # MongoDB
+  mongodb_local:
+    container_name: mongodb_local
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
   products-service:
     container_name: products-service
     build:
@@ -32,3 +41,6 @@ services:
       - 3001:3001
     depends_on:
       - orders-service
+volumes:
+  mongodb_data:
+    driver: local

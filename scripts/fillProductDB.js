@@ -16,7 +16,7 @@ const main = async () => {
       ...products[i],
       quantity: randomQuantity,
     };
-    const { body, status } = await fetch('http://localhost:3007/products', {
+    const { body, status } = await fetch('http://0.0.0.0:3007/products', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
