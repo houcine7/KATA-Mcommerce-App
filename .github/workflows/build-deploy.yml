@@ -71,7 +71,7 @@ jobs:
           podman login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
           echo "Pushing images to Docker Hub"
           images=($(podman images --format={{.Repository}}:{{.Tag}}))
-          echo "${images[@]}"
+          echo "images"
       
           for image in "${images[@]}"; do
             echo "Pushing image: ${image} to Docker Hub"
