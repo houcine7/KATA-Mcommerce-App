@@ -68,12 +68,14 @@ jobs:
       # pushing images to dockerhub
       - name: Push images to dockerhub
         run: |
-          podman login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+          docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_PASSWORD }}"
           echo "Pushing images to Docker Hub"
-          images=($(podman images --format={{.Repository}}:{{.Tag}}))
+          images=($(docker images --format={{.Repository}}:{{.Tag}}))
           echo "$images"
-      
+
           for image in "${images[@]}"; do
             echo "Pushing image: ${image} to Docker Hub"
-            podman push "$image"
+            
+            docker tag "$image" "docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${image}"
+            docker push "docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${image}"
           done
