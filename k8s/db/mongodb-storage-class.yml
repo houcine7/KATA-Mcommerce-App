@@ -1,0 +1,7 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: mongodb-storage-class
+provisioner: kubernetes.io/no-provisioner # this is a manual provisioner
+volumeBindingMode: WaitForFirstConsumer # this is for dynamic provisioning
+allowVolumeExpansion: true
