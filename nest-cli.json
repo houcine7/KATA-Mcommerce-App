@@ -6,7 +6,9 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "watchAssets": true,
-    "assets": ["protos/*.proto"],
+    "assets": [
+      "protos/*.proto"
+    ],
     "webpack": true,
     "tsConfigPath": "apps/payment-service/tsconfig.app.json"
   },
@@ -20,7 +22,9 @@
       "sourceRoot": "./",
       "compilerOptions": {
         "tsConfigPath": "apps/payment-service/tsconfig.app.json",
-        "assets": ["protos/*.proto"],
+        "assets": [
+          "protos/*.proto"
+        ],
         "watchAssets": true
       }
     },
@@ -31,7 +35,9 @@
       "sourceRoot": "./",
       "compilerOptions": {
         "tsConfigPath": "apps/orders-service/tsconfig.app.json",
-        "assets": ["protos/*.proto"],
+        "assets": [
+          "protos/*.proto"
+        ],
         "watchAssets": true
       }
     },
@@ -42,7 +48,9 @@
       "sourceRoot": "./",
       "compilerOptions": {
         "tsConfigPath": "apps/products-service/tsconfig.app.json",
-        "assets": ["protos/*.proto"],
+        "assets": [
+          "protos/*.proto"
+        ],
         "watchAssets": true
       }
     },
@@ -53,6 +61,15 @@
       "sourceRoot": "libs/common/src",
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
+    },
+    "email-service": {
+      "type": "application",
+      "root": "apps/email-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/email-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/email-service/tsconfig.app.json"
       }
     }
   }
