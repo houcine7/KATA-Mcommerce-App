@@ -4,6 +4,9 @@ import { Output, safeParse } from 'valibot';
 import { SCHEMA } from './config.constants';
 import { Config } from './server-config.schema';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
+
 @Injectable()
 export class ServerConfigService {
   private readonly config: Output<typeof Config>;
@@ -12,16 +15,8 @@ export class ServerConfigService {
     const result = safeParse(schema, process.env);
 
     if (!result.success) {
-      throw new Error(
-        result.issues
-          .map(
-            (i) =>
-              `${i.message}: ${i.validation} - ${i.path
-                ?.map((item) => item.key)
-                .join('.')} w/ ${i.input}`,
-          )
-          .join('\n'),
-      );
+      console.log(result);
+      throw new Error("Validation didn't pass");
     }
     this.config = result.output;
   }
