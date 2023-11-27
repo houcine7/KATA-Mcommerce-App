@@ -9,7 +9,7 @@ async function bootstrap() {
     {
       transport: Transport.RMQ,
       options: {
-        urls: ['amqp://127.0.0.1:5672'],
+        urls: ['amqp://guest:guest@0.0.0.0:5555'],
         queue: 'email_queue',
         prefetchCount: 1,
         queueOptions: {

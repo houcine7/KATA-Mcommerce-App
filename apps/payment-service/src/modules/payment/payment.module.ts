@@ -7,10 +7,16 @@ import { ORDER_PACKAGE_NAME } from 'y/common';
 import { join } from 'path';
 import { DatabaseProviders } from '../../database/database.providers';
 import { DatabaseModule } from '../../database/database.module';
+import { RabbitmqEmailService } from './services/rabbitmq-email.service';
 
 @Module({
   controllers: [PaymentController],
-  providers: [...PaymentProviders, PaymentService, ...DatabaseProviders],
+  providers: [
+    ...PaymentProviders,
+    PaymentService,
+    RabbitmqEmailService,
+    ...DatabaseProviders,
+  ],
   imports: [
     DatabaseModule,
     ClientsModule.register([

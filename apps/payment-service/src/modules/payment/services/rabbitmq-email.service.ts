@@ -17,6 +17,8 @@ export class RabbitmqEmailService {
     data: any;
   }) {
     //
+
+    console.log('pattern', pattern);
     return this.client.send(pattern, data).subscribe({
       next: (result) => {
         console.log('result', result);

@@ -14,7 +14,7 @@ export class ProductController {
       const products = await this.productSVC.getAll();
       return res.status(200).json(products);
     } catch (err) {
-      return res.status(500).json(err);
+      return res.status(500).json('Something went wrong!');
     }
   }
 
@@ -27,7 +27,7 @@ export class ProductController {
       const product = await this.productSVC.getById(id);
       return res.status(200).json(product);
     } catch (err) {
-      return res.status(500).json(err);
+      return res.status(500).json('Something went wrong!');
     }
   }
 
@@ -40,7 +40,7 @@ export class ProductController {
       const product = await this.productSVC.create(createProductDto);
       return res.status(200).json(product);
     } catch (err) {
-      return res.status(500).json(err);
+      return res.status(500).json('Something went wrong!');
     }
   }
 }

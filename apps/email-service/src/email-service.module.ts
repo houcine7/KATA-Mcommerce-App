@@ -6,7 +6,7 @@ import {
   getEmailConfigToken,
 } from './email-service.constants';
 
-import { EmailServiceService } from './email-service.service';
+import { EmailService } from './email-service.service';
 import { ServerConfigModule } from './config/server-config.module';
 import { ServerConfigService } from './config/server-config.service';
 
@@ -38,8 +38,8 @@ import { ServerConfigService } from './config/server-config.service';
       useFactory: (config: TransportOptions) => createTransport(config),
       inject: [getEmailConfigToken()],
     },
-    EmailServiceService,
+    EmailService,
   ],
-  exports: [EmailServiceService],
+  exports: [EmailService],
 })
 export class EmailServiceModule {}

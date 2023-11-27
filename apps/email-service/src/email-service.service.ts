@@ -5,7 +5,7 @@ import { verificationEmail } from './email-service.constants';
 import { ServerConfigService } from './config/server-config.service';
 
 @Injectable()
-export class EmailServiceService {
+export class EmailService {
   constructor(
     @InjectEmailTransport() private readonly transport: Transporter,
     private readonly configService: ServerConfigService,

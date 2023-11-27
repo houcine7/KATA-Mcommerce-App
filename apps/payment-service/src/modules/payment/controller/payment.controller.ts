@@ -12,16 +12,20 @@ export class PaymentController {
 
   @Post()
   async insertPayment(@Body() createPaymentDTO: CreatePaymentDTO) {
-    this.rabbitmqEmailSvc.sendVerificationEmail({
-      pattern: 'rabbit-mq-email',
-      data: {
-        username: 'houcine7',
-        email: 'houssainadl123@gmail.com',
-        verificationToken:
-          'HEHEHEPAIOEAPIUEkjkzajeuziehPAEIAZEAZEUAPAKEJAKEHUIA',
-      },
-    });
-    await this.paymentService.createPayment(createPaymentDTO);
+    // this.rabbitmqEmailSvc.sendVerificationEmail({
+    //   pattern: 'rabbit-mq-email',
+    //   data: {
+    //     username: 'houcine7',
+    //     email: 'houssainadl123@gmail.com',
+    //     verificationToken:
+    //       'HEHEHEPAIOEAPIUEkjkzajeuziehPAEIAZEAZEUAPAKEJAKEHUIA',
+    //   },
+    // });
+    return await this.paymentService.createPayment(createPaymentDTO);
+    // return {
+    //   message: 'payment created',
+    //   createPaymentDTO,
+    // };
   }
   @Get('/test')
   async test() {

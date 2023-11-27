@@ -39,14 +39,16 @@ export class PaymentService implements OnModuleInit {
         })
         .exec();
 
-      if (paymentFound.length == 0) {
+      console.log('paymentFound', paymentFound);
+
+      if (paymentFound.length === 0) {
         return {
           success: false,
           data: null,
           message: 'no payment found with the provided orderId',
         };
       }
-
+      console.log('yes siiir');
       return {
         success: true,
         data: paymentFound,
@@ -61,9 +63,11 @@ export class PaymentService implements OnModuleInit {
     createPaymentDTO: CreatePaymentDTO,
   ): Promise<SVCResponse> {
     try {
+      console.log('HELLO ORDER');
       const paymentExists = await this.findPaymentByOrderId(
         createPaymentDTO.orderId,
       );
+
       if (paymentExists.success) {
         return {
           success: false,
@@ -77,18 +81,30 @@ export class PaymentService implements OnModuleInit {
         ...mapToEntity(createPaymentDTO),
         status: 'paid',
       });
-
       const savedPayment = await createdPayment.save();
+
       // set the order status
-      const orderStatusChanged = await this.ordersSVC.setOrderStatus({
-        orderId: createPaymentDTO.orderId,
-        status: 'SUCCESS',
-      });
+      const orderStatusChanged = this.ordersSVC
+        .setOrderStatus({
+          orderId: savedPayment.orderId,
+          status: 'SUCCESS',
+        })
+        .subscribe({
+          next: (data) => {
+            console.log('data', data);
+          },
+          error: (err) => {
+            console.log('err', err);
+          },
+          complete: () => {
+            console.log('complete');
+          },
+        });
 
       return {
         success: true,
         data: {
-          payment: savedPayment,
+          payment: createPaymentDTO,
           orderStatus: orderStatusChanged,
         },
         message: 'payment created successfully',

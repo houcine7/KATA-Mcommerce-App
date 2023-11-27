@@ -26,6 +26,7 @@ export class OrdersServiceImp {
           createOrderDto.products[i].unitPrice *
           createOrderDto.products[i].quantity;
         const product = createOrderDto.products[i];
+
         const { validQuantity, message } =
           await this.productClientSVC.checkQuantity(
             product.productId,

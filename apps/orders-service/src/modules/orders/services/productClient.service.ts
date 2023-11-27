@@ -16,28 +16,27 @@ export class ProductClientService {
     quantity: number,
   ): Promise<ResponseSVC> {
     try {
-      const { data, status } = (await fetcher(
+      const { data, status } = await fetcher(
         `${PRODUCT_SERVICE_URL}/${productId}`,
-      )) as {
-        data: Product;
-        status: number;
-      };
+      );
+
+      console.log('data', data);
       if (status != 200) {
         return {
           validQuantity: false,
           message: 'Error in product service',
         };
       } else {
-        if (data?.quantity && data.quantity >= quantity) {
+        if (data?.quantity >= quantity) {
           return {
             validQuantity: true,
-            quantityAvailable: data.quantity,
+            quantityAvailable: data?.quantity,
             message: 'Quantity available',
           };
         } else {
           return {
             validQuantity: false,
-            quantityAvailable: data.quantity,
+            quantityAvailable: data?.quantity,
             message: 'Quantity not available',
           };
         }
