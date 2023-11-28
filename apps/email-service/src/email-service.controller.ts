@@ -16,13 +16,11 @@ export class EmailServiceController {
     const channel = context.getChannelRef();
     const orginalMessage = context.getMessage();
 
-    console.log('data', data);
-
     channel.ack(orginalMessage);
     this.emailService.sendVerificationEmail(
-      'houcine7',
-      'houssainadl123@gmail.com',
-      'HEHEHEPAIOEAPIUEkjkzajeuziehPAEIAZEAZEUAPAKEJAKEHUIA',
+      data.username,
+      data.email,
+      data.verificationToken,
     );
   }
 }

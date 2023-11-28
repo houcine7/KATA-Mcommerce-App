@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb_local
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+        selector: mongodb_local
+    spec:
+      containers:
+        - name: mongodb_local
+          image: mongo:4.0.8
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+      volumes:
+        - name: mongodb-data
+          persistentVolumeClaim:
+            claimName: mongodb-pvc
