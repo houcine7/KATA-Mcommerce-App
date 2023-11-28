@@ -35,7 +35,8 @@ jobs:
           pnpm run build orders-service
           pnpm run build payment-service
   scan:
-    name: Scan
+    needs: build
+    name: Scan code with CodeQL
     runs-on: ubuntu-latest
 
     permissions:
@@ -47,6 +48,7 @@ jobs:
       fail-fast: false
       matrix:
         language: ['javascript']
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
